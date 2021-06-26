@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class PersonController {
     @GetMapping
     public String getBook(){
-        return "API test!";
+        return "Welcome to API test!";
     }
 }
