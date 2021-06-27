@@ -22,7 +22,7 @@ public class PersonDTO {
     @Size(min = 14)
     private String cpf;
 
-    private LocalDate birthDay;
+    private String birthDay;
 
     @Valid
     @NotEmpty
