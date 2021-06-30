@@ -1,11 +1,19 @@
 package br.com.desafiodio.personapi.dto.request;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.time.LocalDate;
 import java.util.List;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class PersonDTO {
 
     private Long id;
@@ -19,7 +27,7 @@ public class PersonDTO {
     private String lastName;
 
     @NotEmpty
-    @Size(min = 14)
+    @Size(min = 14, max = 14)
     private String cpf;
 
     private String birthDay;

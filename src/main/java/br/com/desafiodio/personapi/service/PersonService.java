@@ -13,7 +13,7 @@ public class PersonService {
 
     private PersonRepository personRepository;
 
-    final PersonMapper personMapper = PersonMapper.INSTANCE;
+    private final PersonMapper personMapper = PersonMapper.INSTANCE;
 
     @Autowired
     public PersonService(PersonRepository personRepository){
