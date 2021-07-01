@@ -2,7 +2,6 @@ package br.com.desafiodio.personapi.controller;
 
 import br.com.desafiodio.personapi.dto.request.PersonDTO;
 import br.com.desafiodio.personapi.dto.response.MessageResponseDTO;
-import br.com.desafiodio.personapi.entity.Person;
 import br.com.desafiodio.personapi.exception.PersonNotFoundException;
 import br.com.desafiodio.personapi.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,5 +36,12 @@ public class PersonController {
     @GetMapping
     public List<PersonDTO> listAll(){
         return personService.listAll();
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteById(@PathVariable Long id) throws PersonNotFoundException{
+
+        personService.delete(id);
     }
 }
