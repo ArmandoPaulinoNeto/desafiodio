@@ -6,6 +6,7 @@ import br.com.desafiodio.personapi.entity.Person;
 import br.com.desafiodio.personapi.exception.PersonNotFoundException;
 import br.com.desafiodio.personapi.mapper.PersonMapper;
 import br.com.desafiodio.personapi.repository.PersonRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,16 +15,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class PersonService {
 
     private PersonRepository personRepository;
 
     private final PersonMapper personMapper = PersonMapper.INSTANCE;
-
-    @Autowired
-    public PersonService(PersonRepository personRepository){
-        this.personRepository = personRepository;
-    }
 
     public MessageResponseDTO createPerson(PersonDTO personDTO){
         Person personToSave = personMapper.toModel(personDTO);
@@ -47,13 +44,16 @@ public class PersonService {
         Person updatedPerson = personRepository.save(personToUpdate);
         return createMassegeResponse(updatedPerson.getId(), "Atualização de pessoa realizado com êxito.");
     }
+
     public void delete(Long id) throws PersonNotFoundException{
         validationId(id);
         personRepository.deleteById(id);
     }
+
     private MessageResponseDTO createMassegeResponse(Long id, String massage) {
         return MessageResponseDTO.builder().message(massage + id).build();
     }
+
     private Person validationId(Long id) throws PersonNotFoundException{
         return personRepository.findById(id).orElseThrow(() -> new PersonNotFoundException(id));
     }
