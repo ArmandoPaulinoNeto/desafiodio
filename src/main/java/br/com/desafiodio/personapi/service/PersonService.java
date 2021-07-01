@@ -8,6 +8,7 @@ import br.com.desafiodio.personapi.mapper.PersonMapper;
 import br.com.desafiodio.personapi.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,10 +25,10 @@ public class PersonService {
         this.personRepository = personRepository;
     }
 
-       public MessageResponseDTO createPerson(PersonDTO personDTO){
+    public MessageResponseDTO createPerson(PersonDTO personDTO){
         Person personToSave = personMapper.toModel(personDTO);
         Person savePerson = personRepository.save(personToSave);
-        return MessageResponseDTO.builder().message("Pessoa inserida com sucesso " + savePerson.getId()).build();
+        return createMassegeResponse(savePerson.getId(), "Cadastro de pessoa realizado com êxito.");
     }
 
     public PersonDTO findById(Long id) throws PersonNotFoundException{
@@ -40,12 +41,20 @@ public class PersonService {
         return allPeople.stream().map(personMapper::toDTO).collect(Collectors.toList());
     }
 
+    public MessageResponseDTO updatePerson(Long id, PersonDTO personDTO) throws PersonNotFoundException{
+        validationId(id);
+        Person personToUpdate = personMapper.toModel(personDTO);
+        Person updatedPerson = personRepository.save(personToUpdate);
+        return createMassegeResponse(updatedPerson.getId(), "Atualização de pessoa realizado com êxito.");
+    }
     public void delete(Long id) throws PersonNotFoundException{
         validationId(id);
         personRepository.deleteById(id);
     }
-
-    public Person validationId(Long id) throws PersonNotFoundException{
+    private MessageResponseDTO createMassegeResponse(Long id, String massage) {
+        return MessageResponseDTO.builder().message(massage + id).build();
+    }
+    private Person validationId(Long id) throws PersonNotFoundException{
         return personRepository.findById(id).orElseThrow(() -> new PersonNotFoundException(id));
     }
 }
