@@ -26,22 +26,19 @@ public class PersonService {
         this.personRepository = personRepository;
     }
 
-    public List<PersonDTO> listAll() {
-        List<Person> allPeople = personRepository.findAll();
-        return allPeople.stream().map(personMapper::toDTO).collect(Collectors.toList());
-    }
-
-    public MessageResponseDTO createPerson(PersonDTO personDTO){
+       public MessageResponseDTO createPerson(PersonDTO personDTO){
         Person personToSave = personMapper.toModel(personDTO);
         Person savePerson = personRepository.save(personToSave);
         return MessageResponseDTO.builder().message("Pessoa inserida com sucesso " + savePerson.getId()).build();
     }
 
     public PersonDTO findById(Long id) throws PersonNotFoundException{
-        Optional<Person> opcionalPerson = personRepository.findById(id);
-        if(opcionalPerson.isEmpty()){
-            throw new PersonNotFoundException(id);
-        }
-        return personMapper.toDTO(opcionalPerson.get());
+        Person person = personRepository.findById(id).orElseThrow(() -> new PersonNotFoundException(id));
+        return personMapper.toDTO(person);
+    }
+
+    public List<PersonDTO> listAll() {
+        List<Person> allPeople = personRepository.findAll();
+        return allPeople.stream().map(personMapper::toDTO).collect(Collectors.toList());
     }
 }
